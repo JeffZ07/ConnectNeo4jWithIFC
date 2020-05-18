@@ -57,9 +57,10 @@ void IfcObject::getStepLine( std::stringstream& stream ) const
 }
 void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity)
 {
+	std::string str; 
 	element_entity->SetAttribute("Entity_ID", m_entity_id);
 	if (m_GlobalId) {
-		std::string str = encodeStepString(m_GlobalId->toString());
+		str = encodeStepString(m_GlobalId->toString());
 		const char* ch = str.c_str();
 		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ch);
 	}
@@ -71,17 +72,23 @@ void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity)
 	else { element_entity->SetAttribute("OwnerHistory", ""); }
 
 	if (m_Name) {
-		element_entity->SetAttribute("IFCLABEL", m_Name->toString().c_str());
+		str = encodeStepString(m_Name->toString());
+		const char* namechr = str.c_str();
+		element_entity->SetAttribute("IFCLABEL", namechr);
 	}
 	else { element_entity->SetAttribute("IFCLABEL", ""); }
 
 	if (m_Description) {
-		element_entity->SetAttribute("Description", m_Description->toString().c_str());
+		str = encodeStepString(m_Description->toString());
+		const char* Deschr = str.c_str();
+		element_entity->SetAttribute("Description", Deschr);
 	}
 	else { element_entity->SetAttribute("Description", ""); }
 
 	if (m_ObjectType) {
-		element_entity->SetAttribute("ObjectType", m_ObjectType->toString().c_str());
+		str = encodeStepString(m_ObjectType->toString());
+		const char* Onjchr = str.c_str();
+		element_entity->SetAttribute("ObjectType", Onjchr);
 	}
 	else { element_entity->SetAttribute("ObjectType", ""); }
 }
