@@ -43,3 +43,5 @@ examples/SimpleViewerExampleQt/dumpEntity.ifc
 examples/SimpleViewerExampleQt/SimpleWall.ifc
 examples/SimpleViewerExampleQt/GeneratedFiles/
 
+IFC2XML/IFC2XML.h
+IFC2XML/IfcPlusPlusd.dll
