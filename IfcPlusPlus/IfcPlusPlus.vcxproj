@@ -173,7 +173,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>src;../Carve/src/;../Carve/src/include;../Carve/src/common;$(BOOST_DIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;../Carve/src/;../Carve/src/include;../Carve/src/common;$(BOOST_DIR);D:\lib\boost_1_70_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WINDOWS;UNICODE;WIN32;WIN64;_DEBUG;_CRT_SECURE_NO_WARNINGS;_MBCS;IFCQUERY_AS_DYNAMIC_LIBRARY;IFCQUERY_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
@@ -187,16 +187,14 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(BOOST_DIR)\stage\lib;D:\lib\boost_1_70_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y  "$(TargetDir)$(ProjectName)d.dll" "$(SolutionDir)IFC2XML\$(ProjectName)d.dll" </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -1557,6 +1555,7 @@
     <ClCompile Include="src\ifcpp\reader\ReaderXML.cpp" />
     <ClCompile Include="src\ifcpp\writer\WriterSTEP.cpp" />
     <ClCompile Include="src\ifcpp\writer\WriterUtil.cpp" />
+    <ClCompile Include="src\external\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\external\XUnzip.h" />
@@ -1620,6 +1619,7 @@
     <ClInclude Include="src\ifcpp\writer\WriterSTEP.h" />
     <ClInclude Include="src\ifcpp\writer\WriterUtil.h" />
     <ClInclude Include="src\ifcpp\writer\WriterXML.h" />
+    <ClInclude Include="src\external\tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

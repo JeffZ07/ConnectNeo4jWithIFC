@@ -213,6 +213,9 @@
     <ClInclude Include="src\external\XUnzip.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\external\tinyxml2.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ifcpp\IFC4\lib\IfcAbsorbedDoseMeasure.cpp">
@@ -3855,6 +3858,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\ifcpp\IFC4\lib\IfcTriangulatedIrregularNetwork.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\tinyxml2.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

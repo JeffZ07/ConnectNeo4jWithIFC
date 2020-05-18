@@ -124,3 +124,6 @@ struct vec4
 	double m_b = 0;
 	double m_a = 0;
 };
+
+#include "external/tinyxml2.h"
+using namespace tinyxml2;

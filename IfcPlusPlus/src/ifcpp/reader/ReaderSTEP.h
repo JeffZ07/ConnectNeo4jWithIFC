@@ -20,6 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 #include "ifcpp/model/BasicTypes.h"
 #include "ifcpp/model/BuildingObject.h"
 #include "AbstractReader.h"
+#include "external/tinyxml2.h"
+using namespace tinyxml2;
 
 class IFCQUERY_EXPORT ReaderSTEP : public AbstractReader
 {
@@ -36,6 +38,7 @@ public:
 	**/
 	virtual void loadModelFromFile( const std::wstring& filePath, shared_ptr<BuildingModel>& targetModel );
 	virtual void loadModelFromString( std::string& content, shared_ptr<BuildingModel>& targetModel );
+	virtual void xmlwriteModelToStream(std::wstring path, const char*);
 
 	void splitIntoStepLines(	const std::string& read_in, std::vector<std::string>& target_vec );
 	void readSingleStepLine(	const std::string& line, std::pair<std::string, shared_ptr<BuildingEntity> >& target_read_object );

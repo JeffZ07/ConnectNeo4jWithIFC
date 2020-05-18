@@ -936,3 +936,60 @@ void ReaderSTEP::readData(	std::string& read_in, const BuildingModel::SchemaVers
 		messageCallback( err.str(), StatusCallback::MESSAGE_TYPE_ERROR, __FUNC__ );
 	}
 }
+
+inline std::string ws2s(const std::wstring& wstr)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> StringConverter;
+	return StringConverter.to_bytes(wstr);
+}
+
+void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_path)
+{
+	tinyxml2::TinyXMLDocument docXml;
+	const char* declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+	docXml.Parse(declaration);
+	XMLElement* element_root = docXml.NewElement("IFCData");
+	docXml.InsertEndChild(element_root);
+
+	shared_ptr<BuildingModel> ifc_model(new BuildingModel());
+	loadModelFromFile(path, ifc_model);
+
+	const std::wstring& file_header_wstr = ifc_model->getFileHeader();
+	std::string file_header_str = ws2s(file_header_wstr);
+
+	const std::map<int, shared_ptr<BuildingEntity> >& map = ifc_model->getMapIfcEntities();
+	std::map<int, shared_ptr<BuildingEntity> > map_ordered(map.begin(), map.end());
+	size_t i = 0;
+	double last_progress = 0.0;
+	double num_objects = double(map_ordered.size());
+	for (auto it = map_ordered.begin(); it != map_ordered.end(); ++it)
+	{
+		shared_ptr<BuildingEntity> obj = it->second;
+
+		if (obj.use_count() < 2)
+		{
+			// entity is referenced only in model map, not by other entities
+			if (!dynamic_pointer_cast<IfcProduct>(obj) && !dynamic_pointer_cast<IfcProject>(obj))
+			{
+				continue;
+			}
+		}
+
+		// check for certain type of the entity:
+		shared_ptr<IfcObject> ifc_obj = dynamic_pointer_cast<IfcObject>(obj);
+		if (ifc_obj)
+		{
+			XMLElement* element_entity = docXml.NewElement("BuildingEntity");
+			element_root->InsertEndChild(element_entity);
+			std::vector<std::vector<const char*>> result;
+			ifc_obj->StepLine2XML(element_entity);
+
+			//break;
+		}
+
+
+		++i;
+	}
+
+	docXml.SaveFile(save_file_path);
+}

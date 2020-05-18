@@ -45,3 +45,6 @@ examples/SimpleViewerExampleQt/GeneratedFiles/
 IfcPlusPlus/IfcPlusPlus.vcxproj
 IfcPlusPlus/IfcPlusPlus.vcxproj
 *.vcxproj
+*.vcxproj
+IfcPlusPlus/IfcPlusPlus.vcxproj
+IfcPlusPlus.sln

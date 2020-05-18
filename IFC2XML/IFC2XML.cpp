@@ -2,10 +2,18 @@
 //
 
 #include <iostream>
+#include <ifcpp/reader/ReaderSTEP.h>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	const char* save_file_path = "C:/Users/zhiwa/OneDrive/Desktop/ifcppout2.xml";
+	std::cout << "Start to transfer IFC into XML\n";
+	std::cout << "Output Location:"<<save_file_path<<"\n";
+
+	shared_ptr<ReaderSTEP> step_reader(new ReaderSTEP());
+
+	step_reader->xmlwriteModelToStream(L"example.ifc", save_file_path);
+	std::cout << "Done!\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -55,6 +55,36 @@ void IfcObject::getStepLine( std::stringstream& stream ) const
 	if( m_ObjectType ) { m_ObjectType->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
+void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity)
+{
+	element_entity->SetAttribute("Entity_ID", m_entity_id);
+	if (m_GlobalId) {
+		std::string str = encodeStepString(m_GlobalId->toString());
+		const char* ch = str.c_str();
+		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ch);
+	}
+	else { element_entity->SetAttribute("IFCGLOBALLYUNIQUEID",""); }
+
+	if (m_OwnerHistory) {
+		element_entity->SetAttribute("OwnerHistory", m_OwnerHistory->m_entity_id);
+	}
+	else { element_entity->SetAttribute("OwnerHistory", ""); }
+
+	if (m_Name) {
+		element_entity->SetAttribute("IFCLABEL", m_Name->toString().c_str());
+	}
+	else { element_entity->SetAttribute("IFCLABEL", ""); }
+
+	if (m_Description) {
+		element_entity->SetAttribute("Description", m_Description->toString().c_str());
+	}
+	else { element_entity->SetAttribute("Description", ""); }
+
+	if (m_ObjectType) {
+		element_entity->SetAttribute("ObjectType", m_ObjectType->toString().c_str());
+	}
+	else { element_entity->SetAttribute("ObjectType", ""); }
+}
 void IfcObject::getStepParameter( std::stringstream& stream, bool /*is_select_type*/ ) const { stream << "#" << m_entity_id; }
 const std::wstring IfcObject::toString() const { return L"IfcObject"; }
 void IfcObject::readStepArguments( const std::vector<std::wstring>& args, const std::map<int,shared_ptr<BuildingEntity> >& map )
