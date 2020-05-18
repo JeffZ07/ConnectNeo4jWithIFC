@@ -18,3 +18,9 @@ https://github.com/ifcquery/ifcplusplus/wiki/Build-instructions
  ![Steel frame model](http://www.ifcquery.com/img/Building-model-steel-frame-2018-02-05.png)
  
    
+## Jeff's note:
+How to build boost: use vcpkg, set project and include nuget.
+Failed because of the UUID lib issue:
+error LNK2019: unresolved external symbol BCryptCloseAlgorithmProvider 
+need an old version of boost, but vcpkg not handy on this.
+Currently use vs2017, and built x64
