@@ -42,9 +42,4 @@ examples/SimpleViewerExampleMFC/x64/Debug/SimpleViewerExampleMFC.ilk
 examples/SimpleViewerExampleQt/dumpEntity.ifc
 examples/SimpleViewerExampleQt/SimpleWall.ifc
 examples/SimpleViewerExampleQt/GeneratedFiles/
-IfcPlusPlus/IfcPlusPlus.vcxproj
-IfcPlusPlus/IfcPlusPlus.vcxproj
-*.vcxproj
-*.vcxproj
-IfcPlusPlus/IfcPlusPlus.vcxproj
-IfcPlusPlus.sln
+
