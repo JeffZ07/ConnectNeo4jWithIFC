@@ -18,3 +18,6 @@ https://github.com/ifcquery/ifcplusplus/wiki/Build-instructions
  ![Steel frame model](http://www.ifcquery.com/img/Building-model-steel-frame-2018-02-05.png)
  
    
+## Jeff's note:
+How to build boost: use vcpkg, set project and include nuget.
+Currently use vs2017, and built x64
