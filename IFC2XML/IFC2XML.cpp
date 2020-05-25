@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <ifcpp/reader/ReaderSTEP.h>
-#include "IFC2XML.h"
+
 
 int main()
 {
-
+	const char* save_file_path = "C:/Users/zhiwa/Desktop/Linwood.xml";
 	std::cout << "Start to transfer IFC into XML\n";
 	std::cout << "Output Location:"<<save_file_path<<"\n";
 
