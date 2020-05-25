@@ -62,6 +62,39 @@ void IfcRelContainedInSpatialStructure::getStepLine( std::stringstream& stream )
 	if( m_RelatingStructure ) { stream << "#" << m_RelatingStructure->m_entity_id; } else { stream << "$"; }
 	stream << ");";
 }
+void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* element_entity)
+{
+	std::string str;
+	element_entity->SetAttribute("Entity_ID", m_entity_id);
+	if (m_GlobalId) {
+		str = encodeStepString(m_GlobalId->toString());
+		const char* ch = str.c_str();
+		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ch);
+	}
+	else { element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ""); }
+
+	if (m_OwnerHistory) {
+		element_entity->SetAttribute("OwnerHistory", m_OwnerHistory->m_entity_id);
+	}
+	else { element_entity->SetAttribute("OwnerHistory", ""); }
+
+	if (m_Name) {
+		str = encodeStepString(m_Name->toString());
+		const char* namechr = str.c_str();
+		element_entity->SetAttribute("IFCLABEL", namechr);
+	}
+	else { element_entity->SetAttribute("IFCLABEL", ""); }
+
+	if (m_Description) {
+		str = encodeStepString(m_Description->toString());
+		const char* Deschr = str.c_str();
+		element_entity->SetAttribute("Description", Deschr);
+	}
+	else { element_entity->SetAttribute("Description", ""); }
+	writeEntityList2XML(element_entity, m_RelatedElements);
+
+}
+
 void IfcRelContainedInSpatialStructure::getStepParameter( std::stringstream& stream, bool /*is_select_type*/ ) const { stream << "#" << m_entity_id; }
 const std::wstring IfcRelContainedInSpatialStructure::toString() const { return L"IfcRelContainedInSpatialStructure"; }
 void IfcRelContainedInSpatialStructure::readStepArguments( const std::vector<std::wstring>& args, const std::map<int,shared_ptr<BuildingEntity> >& map )

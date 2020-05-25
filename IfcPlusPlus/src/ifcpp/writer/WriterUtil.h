@@ -155,6 +155,37 @@ void writeEntityList( std::stringstream& stream, const std::vector<shared_ptr<T>
 }
 
 template<typename T>
+void writeEntityList2XML(tinyxml2::XMLElement* element_entity, const std::vector<shared_ptr<T> >& vec)
+{
+	tinyxml2::TinyXMLDocument* xmlfile;
+	xmlfile = element_entity->GetDocument();
+	XMLElement* subnode = xmlfile->NewElement("RelatedElements");
+
+	// example: (#287,#291,$,#299)
+	//if (vec.size() == 0)
+	//{
+	//	return;
+	//}
+	for (size_t ii = 0; ii < vec.size(); ++ii)
+	{
+		const shared_ptr<T>& entity = vec[ii];
+		if (entity)
+		{
+			XMLElement* subsubnode = xmlfile->NewElement("SubRelatedElements");
+			
+			subsubnode->SetText(entity->m_entity_id);
+			subnode->InsertEndChild(subsubnode);
+		}
+		else
+		{
+			//element_entity->SetAttribute("RelatedElements", "");
+		}
+	}
+	element_entity->InsertFirstChild(subnode);
+
+}
+
+template<typename T>
 void writeEntityList2D( std::stringstream& stream, const std::vector<std::vector<shared_ptr<T> > >& vec )
 {
 	// example: ((#287,#291,$,#299),(#287,#291,$,#299))
