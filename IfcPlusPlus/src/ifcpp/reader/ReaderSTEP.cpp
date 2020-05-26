@@ -977,6 +977,7 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 
 		// check for certain type of the entity:
 		shared_ptr<IfcRelContainedInSpatialStructure> ifc_rela = dynamic_pointer_cast<IfcRelContainedInSpatialStructure>(obj);
+		shared_ptr<IfcRelAggregates> ifc_rela2 = dynamic_pointer_cast<IfcRelAggregates>(obj);
 		shared_ptr<IfcObject> ifc_obj = dynamic_pointer_cast<IfcObject>(obj);
 		if (ifc_obj)
 		{
@@ -994,7 +995,13 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 			std::vector<std::vector<const char*>> result;
 			ifc_rela->StepLine2XML(element_entity);
 		}
-
+		else if (ifc_rela2)
+		{
+			XMLElement* element_entity = docXml.NewElement("Relationship");
+			element_root->InsertEndChild(element_entity);
+			std::vector<std::vector<const char*>> result;
+			ifc_rela2->StepLine2XML(element_entity);
+		}
 		++i;
 	}
 
