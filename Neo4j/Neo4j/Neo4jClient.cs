@@ -47,9 +47,40 @@ namespace Neo4j
 
     }
 
-    //public void Relate(PendingNode fromNodeId, PendingNode toNodeId, Model.MEPEdgeTypes relType, Dictionary<string, object> variables)
-    //{
-    //}
+    public void Relate(PendingNode fromNodeId, PendingNode toNodeId, string relType, Dictionary<string, object> variables)
+    {
+      Dictionary<string, object> props = new Dictionary<string, object>();
+      props.Add("frid", fromNodeId.TempId);
+      props.Add("toid", toNodeId.TempId);
+
+      string query = string.Empty;
+      if (variables != null && variables.Count > 0)
+      {
+        props.Add("cvar", variables);
+        query =
+            string.Format("MATCH(a: {0} {{TempId: $frid}}),(b:{1} {{TempId: $toid}})", fromNodeId.Node.Label, toNodeId.Node.Label) +
+            string.Format("CREATE (a)-[r:{0} $cvar]->(b) ", relType);
+      }
+      else
+      {
+        query =
+            string.Format("MATCH(a: {0} {{TempId: $frid}}),(b:{1} {{TempId: $toid}})", fromNodeId.Node.Label, toNodeId.Node.Label) +
+            string.Format("CREATE (a)-[r:{0}]->(b) ", relType);
+      }
+
+      var pec = new PendingCypher();
+      pec.Query = query;
+      pec.Props = props;
+
+      //pec.Committed = (IStatementResult result) =>
+      //{
+      //  var rs = result;
+
+      //};
+
+      commitStack.Enqueue(pec);
+
+    }
 
     //  public void Relate(Model.Node fromNode, Model.Node toNode, string relType, Dictionary<string, object> variables)
     //{

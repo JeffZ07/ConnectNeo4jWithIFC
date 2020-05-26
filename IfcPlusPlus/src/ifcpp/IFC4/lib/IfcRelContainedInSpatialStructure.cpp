@@ -65,6 +65,7 @@ void IfcRelContainedInSpatialStructure::getStepLine( std::stringstream& stream )
 void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* element_entity)
 {
 	std::string str;
+	element_entity->SetAttribute("Type", "IFCRELCONTAINEDINSPATIALSTRUCTURE");
 	element_entity->SetAttribute("Entity_ID", m_entity_id);
 	if (m_GlobalId) {
 		str = encodeStepString(m_GlobalId->toString());

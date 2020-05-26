@@ -12,3 +12,17 @@ D:\GitHub\Database_ifcplusplus\Neo4j\bin\Debug\System.ValueTuple.dll
 D:\GitHub\Database_ifcplusplus\Neo4j\bin\Debug\Neo4j.Driver.Simple.xml
 D:\GitHub\Database_ifcplusplus\Neo4j\bin\Debug\System.ValueTuple.xml
 D:\GitHub\Database_ifcplusplus\Neo4j\obj\Debug\Neo4j.csprojAssemblyReference.cache
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\obj\Debug\Neo4j.csprojAssemblyReference.cache
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\obj\Debug\Neo4j.csproj.CoreCompileInputs.cache
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\obj\Debug\Neo4j.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\obj\Debug\Neo4j.pdb
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.pdb
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.Driver.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.Driver.Simple.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\shortid.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\System.ValueTuple.dll
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.Driver.xml
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\Neo4j.Driver.Simple.xml
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\bin\Debug\System.ValueTuple.xml
+D:\GitHub\ConnectNeo4jWithIFC\Neo4j\obj\Debug\Neo4j.csproj.CopyComplete
