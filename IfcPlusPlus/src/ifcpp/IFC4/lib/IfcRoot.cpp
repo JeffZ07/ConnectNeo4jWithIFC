@@ -44,7 +44,7 @@ void IfcRoot::getStepLine( std::stringstream& stream ) const
 	if( m_Description ) { m_Description->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
-void IfcRoot::StepLine2XML(tinyxml2::XMLElement* element_entity)
+void IfcRoot::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 {
 	std::string str;
 	element_entity->SetAttribute("Entity_ID", m_entity_id);

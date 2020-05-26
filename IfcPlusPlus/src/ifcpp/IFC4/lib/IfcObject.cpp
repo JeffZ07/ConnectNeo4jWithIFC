@@ -55,7 +55,7 @@ void IfcObject::getStepLine( std::stringstream& stream ) const
 	if( m_ObjectType ) { m_ObjectType->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
-void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity)
+void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 {
 	std::string str; 
 	element_entity->SetAttribute("Entity_ID", m_entity_id);
