@@ -84,7 +84,7 @@ void IfcSpace::getStepLine( std::stringstream& stream ) const
 	if( m_ElevationWithFlooring ) { m_ElevationWithFlooring->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
-void IfcSpace::StepLine2XML(tinyxml2::XMLElement* element_entity)
+void IfcSpace::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 {
 	std::string str;
 	element_entity->SetAttribute("Type", "IFCSPACE");
