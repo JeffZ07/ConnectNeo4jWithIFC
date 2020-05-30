@@ -92,6 +92,8 @@ void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* eleme
 		element_entity->SetAttribute("Description", Deschr);
 	}
 	else { element_entity->SetAttribute("Description", ""); }
+	if (m_RelatingStructure) { element_entity->SetAttribute("RelatingObject", m_RelatingStructure->m_entity_id); }
+	else { element_entity->SetAttribute("RelatingObject", ""); }
 	writeEntityList2XML(element_entity, m_RelatedElements);
 
 }

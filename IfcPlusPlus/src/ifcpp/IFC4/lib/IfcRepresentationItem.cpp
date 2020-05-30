@@ -23,6 +23,11 @@ void IfcRepresentationItem::getStepLine( std::stringstream& stream ) const
 	stream << "#" << m_entity_id << "= IFCREPRESENTATIONITEM" << "(";
 	stream << ");";
 }
+void IfcRepresentationItem::StepLine2XML(tinyxml2::XMLElement* element_entity) const
+{
+	element_entity->SetAttribute("Type", "IFCREPRESENTATIONITEM");
+	element_entity->SetAttribute("Entity_ID", m_entity_id);
+}
 void IfcRepresentationItem::getStepParameter( std::stringstream& stream, bool /*is_select_type*/ ) const { stream << "#" << m_entity_id; }
 const std::wstring IfcRepresentationItem::toString() const { return L"IfcRepresentationItem"; }
 void IfcRepresentationItem::readStepArguments( const std::vector<std::wstring>& args, const std::map<int,shared_ptr<BuildingEntity> >& map )

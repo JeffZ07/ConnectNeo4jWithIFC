@@ -7,13 +7,13 @@
 
 int main()
 {
-	const char* save_file_path = "C:/Users/zhiwa/Desktop/Linwood.xml";
+	const char* save_file_path = "C:/Users/zhiwa/OneDrive/Desktop/Linwood.xml";
 	std::cout << "Start to transfer IFC into XML\n";
 	std::cout << "Output Location:"<<save_file_path<<"\n";
 
 	shared_ptr<ReaderSTEP> step_reader(new ReaderSTEP());
 
-	step_reader->xmlwriteModelToStream(L"example.ifc", save_file_path);
+	step_reader->xmlwriteModelToStream(L"Linwood.ifc", save_file_path);
 	std::cout << "Done!\n";
 }
 

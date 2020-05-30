@@ -18,6 +18,7 @@ namespace PushXml2Neo4j
     string filePath = string.Empty;
     MemoryStream m_memStream = null;
     Dictionary<string, PendingNode> m_relationDic = null;
+    Dictionary<string, PendingNode> m_containDic = null;
     public Form1()
     {
       InitializeComponent();
@@ -34,7 +35,9 @@ namespace PushXml2Neo4j
 
         XmlNodeList m_entityNodes = root.SelectNodes("BuildingEntity");
         XmlNodeList m_relationNodes = root.SelectNodes("Relationship");
+        XmlNodeList m_ContainNodes = root.SelectNodes("Container");
         makeRelationDic(m_relationNodes, client);
+        makeContainDic(m_ContainNodes, client);
 
         Neo4j.Model.Node neo4jNode = new Neo4j.Model.Node();
 
@@ -42,23 +45,30 @@ namespace PushXml2Neo4j
         foreach (XmlNode xmlNode in m_entityNodes)
         {
           neo4jNode = new Neo4j.Model.Node();
-          string IDValue = xmlNode.Attributes[0].Value;
-          neo4jNode.Name = "Entity" + IDValue;
-          Dictionary<string, object> props = new Dictionary<string, object>();
-          //props.Add("Entity_ID", xmlNode.Attributes[0].Value);
-          //props.Add("IFCGLOBALLYUNIQUEID", xmlNode.Attributes[1].Value);
-          //props.Add("OwnerHistory", xmlNode.Attributes[2].Value);
-          //props.Add("IFCLABEL", xmlNode.Attributes[3].Value);
-          //props.Add("ObjectType", xmlNode.Attributes[5].Value);
-          props.Add("Entity_ID", xmlNode.Attributes["Entity_ID"].Value);
-          props.Add("IFCGLOBALLYUNIQUEID", xmlNode.Attributes["IFCGLOBALLYUNIQUEID"].Value);
-          props.Add("OwnerHistory", xmlNode.Attributes["OwnerHistory"].Value);
-          props.Add("IFCLABEL", xmlNode.Attributes["IFCLABEL"].Value);
-          props.Add("Description", xmlNode.Attributes["Description"].Value);
-          props.Add("ObjectType", xmlNode.Attributes["ObjectType"].Value);
-          var elmid = client.Push(neo4jNode, props);
-          if(m_relationDic.ContainsKey(IDValue))
-            client.Relate(m_relationDic[IDValue], elmid, "contain", null);
+          if(xmlNode.Attributes.Count > 0)
+          {
+            string EleType = xmlNode.Attributes[0].Value;
+            neo4jNode.Name = "Entity" + EleType;
+            string EleId = xmlNode.Attributes[1].Value;
+
+            Dictionary<string, object> props = new Dictionary<string, object>();
+            for (int i = 0; i < xmlNode.Attributes.Count - 1; i++)
+            {
+              props.Add(xmlNode.Attributes[i].Name, xmlNode.Attributes[i].Value);
+            }
+            var elmid = client.Push(neo4jNode, props);
+            if (m_relationDic.ContainsKey(EleId))
+              client.Relate(m_relationDic[EleId], elmid, "relate", null);
+            if (m_containDic.ContainsKey(EleId))
+              client.Relate(m_containDic[EleId], elmid, "contain", null);
+          }
+     
+          //props.Add("Entity_ID", xmlNode.Attributes["Entity_ID"].Value);
+          //props.Add("IFCGLOBALLYUNIQUEID", xmlNode.Attributes["IFCGLOBALLYUNIQUEID"].Value);
+          //props.Add("OwnerHistory", xmlNode.Attributes["OwnerHistory"].Value);
+          //props.Add("IFCLABEL", xmlNode.Attributes["IFCLABEL"].Value);
+          //props.Add("Description", xmlNode.Attributes["Description"].Value);
+          //props.Add("ObjectType", xmlNode.Attributes["ObjectType"].Value);
         }
 
         client.Commit();
@@ -72,7 +82,8 @@ namespace PushXml2Neo4j
       foreach (XmlNode relationElem in m_relationNodes)
       {
         Neo4j.Model.Node neo4jNode = new Neo4j.Model.Node();
-        neo4jNode.Name = "Entity" + relationElem.Attributes[0].Value;
+        //neo4jNode.Name = "Entity" + relationElem.Attributes[0].Value;   
+        neo4jNode.Name = "Entity" + relationElem.Attributes["RelatingObject"].Value;
         Dictionary<string, object> props = new Dictionary<string, object>();
         props.Add("Entity_ID", relationElem.Attributes["Entity_ID"].Value);
         props.Add("IFCGLOBALLYUNIQUEID", relationElem.Attributes["IFCGLOBALLYUNIQUEID"].Value);
@@ -85,6 +96,31 @@ namespace PushXml2Neo4j
         foreach (XmlNode subElem in relationElemList)
         {
           m_relationDic.Add(subElem.InnerText, elmid);
+        }
+
+      }
+    }
+
+    private void makeContainDic(XmlNodeList m_ContainNodes, DBClient client)
+    {
+      m_containDic = new Dictionary<string, PendingNode>();
+      foreach (XmlNode relationElem in m_ContainNodes)
+      {
+        Neo4j.Model.Node neo4jNode = new Neo4j.Model.Node();
+        //neo4jNode.Name = "Entity" + relationElem.Attributes[0].Value;   
+        neo4jNode.Name = "Entity" + relationElem.Attributes["RelatingObject"].Value;
+        Dictionary<string, object> props = new Dictionary<string, object>();
+        props.Add("Entity_ID", relationElem.Attributes["Entity_ID"].Value);
+        props.Add("IFCGLOBALLYUNIQUEID", relationElem.Attributes["IFCGLOBALLYUNIQUEID"].Value);
+        props.Add("OwnerHistory", relationElem.Attributes["OwnerHistory"].Value);
+        props.Add("IFCLABEL", relationElem.Attributes["IFCLABEL"].Value);
+        props.Add("Description", relationElem.Attributes["Description"].Value);
+        var elmid = client.Push(neo4jNode, props);
+
+        XmlNode relationElemList = relationElem.SelectNodes("RelatedElements")[0];
+        foreach (XmlNode subElem in relationElemList)
+        {
+          m_containDic.Add(subElem.InnerText, elmid);
         }
 
       }

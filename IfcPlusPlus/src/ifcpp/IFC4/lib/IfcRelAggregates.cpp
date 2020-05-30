@@ -88,6 +88,8 @@ void IfcRelAggregates::StepLine2XML(tinyxml2::XMLElement* element_entity)
 		element_entity->SetAttribute("Description", Deschr);
 	}
 	else { element_entity->SetAttribute("Description", ""); }
+	if (m_RelatingObject) { element_entity->SetAttribute("RelatingObject",m_RelatingObject->m_entity_id); }
+	else { element_entity->SetAttribute("RelatingObject", ""); }
 	writeEntityList2XML(element_entity, m_RelatedObjects);
 
 }
