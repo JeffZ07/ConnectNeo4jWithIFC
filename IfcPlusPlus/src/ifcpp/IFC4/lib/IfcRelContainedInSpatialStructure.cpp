@@ -62,20 +62,34 @@ void IfcRelContainedInSpatialStructure::getStepLine( std::stringstream& stream )
 	if( m_RelatingStructure ) { stream << "#" << m_RelatingStructure->m_entity_id; } else { stream << "$"; }
 	stream << ");";
 }
-void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* element_entity)
+void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* element_entity, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic)
 {
 	std::string str;
+	boost::property_tree::ptree ptelem;
+
 	element_entity->SetAttribute("Type", "IFCRELCONTAINEDINSPATIALSTRUCTURE");
+	ptelem.put("Type", "IFCRELCONTAINEDINSPATIALSTRUCTURE");
+
 	element_entity->SetAttribute("Entity_ID", m_entity_id);
+	std::ostringstream s;
+	s << m_entity_id;
+	ptelem.put("Entity_ID", s.str());
+
 	if (m_GlobalId) {
 		str = encodeStepString(m_GlobalId->toString());
 		const char* ch = str.c_str();
 		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ch);
+		ptelem.put("IFCGLOBALLYUNIQUEID", str);
 	}
-	else { element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ""); }
+	else { 
+		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", "");
+	}
 
 	if (m_OwnerHistory) {
 		element_entity->SetAttribute("OwnerHistory", m_OwnerHistory->m_entity_id);
+		std::ostringstream s2;
+		s2 << m_OwnerHistory->m_entity_id;
+		ptelem.put("OwnerHistory", s2.str());
 	}
 	else { element_entity->SetAttribute("OwnerHistory", ""); }
 
@@ -83,6 +97,7 @@ void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* eleme
 		str = encodeStepString(m_Name->toString());
 		const char* namechr = str.c_str();
 		element_entity->SetAttribute("IFCLABEL", namechr);
+		ptelem.put("IFCLABEL", str);
 	}
 	else { element_entity->SetAttribute("IFCLABEL", ""); }
 
@@ -90,12 +105,70 @@ void IfcRelContainedInSpatialStructure::StepLine2XML(tinyxml2::XMLElement* eleme
 		str = encodeStepString(m_Description->toString());
 		const char* Deschr = str.c_str();
 		element_entity->SetAttribute("Description", Deschr);
+		ptelem.put("Description",  str);
 	}
 	else { element_entity->SetAttribute("Description", ""); }
-	if (m_RelatingStructure) { element_entity->SetAttribute("RelatingObject", m_RelatingStructure->m_entity_id); }
-	else { element_entity->SetAttribute("RelatingObject", ""); }
+
+	std::ostringstream s3;
+	if (m_RelatingStructure) { 
+		element_entity->SetAttribute("RelatingObject", m_RelatingStructure->m_entity_id);
+		s3 << m_RelatingStructure->m_entity_id;
+		ptelem.put("RelatingObject", s3.str());
+	}
+	else { element_entity->SetAttribute("RelatingObject", ""); 
+	s3 << "";
+	}
 	writeEntityList2XML(element_entity, m_RelatedElements);
 
+	using boost::property_tree::ptree;
+	for (size_t ii = 0; ii < m_RelatedElements.size(); ++ii)
+	{
+		std::ostringstream s;
+		s << m_RelatedElements[ii]->m_entity_id;
+
+		
+		if (Dic.count(s.str()) > 0)
+		{
+			ptree te = Dic[s.str()];
+			pt.erase("BuildingEntity"+ s.str());
+			te.get_child("Parent").put_value(s3.str());
+			pt.put_child("BuildingEntity"+ s.str(), te);
+
+			break;
+		}
+	}
+
+	////writeEntityList2Json(pt, m_RelatedElements);
+	////std::vector< std::pair<std::string, std::string> > buildingEnt;
+	//std::vector< boost::property_tree::ptree > buildingEnt;
+	//using boost::property_tree::ptree;
+	//ptree::const_iterator end = pt.end();
+	//for (ptree::const_iterator it = pt.begin(); it != end; ++it) {
+	//	std::string IDvalue = it->second.get_child("Entity_ID").get_value<std::string>();
+	//	for (size_t ii = 0; ii < m_RelatedElements.size(); ++ii)
+	//	{
+	//		std::ostringstream s;
+	//		s << m_RelatedElements[ii]->m_entity_id;
+	//		if (s.str() == IDvalue)
+	//		{
+	//			ptree te = it->second.get_child("Parent");
+	//			te.get_child("Parent").put_value(s3.str());
+	//			te.put("Parent", s3.str());
+	//			break;
+	//		}
+	//	}
+	//	//if(IDvalue == m_RelatedElements->m_entity_id)
+
+	//	std::cout << it->first << ": " << it->second.get_value<std::string>() << std::endl;
+	//	//print(it->second);
+	//}
+	////for (std::pair<std::string, std::string> &buildingEnt : pt.get_child("BuildingEntity"))
+	////{
+	////	buildingEnt.get_child("Entity_ID");
+	////}
+	////pt.get_child("BuildingEntity");
+
+	//pt.add_child("Contain", ptelem);
 }
 
 void IfcRelContainedInSpatialStructure::getStepParameter( std::stringstream& stream, bool /*is_select_type*/ ) const { stream << "#" << m_entity_id; }

@@ -55,20 +55,34 @@ void IfcObject::getStepLine( std::stringstream& stream ) const
 	if( m_ObjectType ) { m_ObjectType->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
-void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity) const
+void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic) const
 {
 	std::string str; 
+
 	element_entity->SetAttribute("Type", "IFCOBJECT");
+	pt.put("Type", "IFCOBJECT");
+	
 	element_entity->SetAttribute("Entity_ID", m_entity_id);
+	std::ostringstream s;
+	s << m_entity_id;
+	pt.put("Entity_ID", s.str());
+
+	pt.put("Parent", "");
+
 	if (m_GlobalId) {
 		str = encodeStepString(m_GlobalId->toString());
 		const char* ch = str.c_str();
 		element_entity->SetAttribute("IFCGLOBALLYUNIQUEID", ch);
+		pt.put("IFCGLOBALLYUNIQUEID", str);
 	}
 	else { element_entity->SetAttribute("IFCGLOBALLYUNIQUEID",""); }
 
+
 	if (m_OwnerHistory) {
 		element_entity->SetAttribute("OwnerHistory", m_OwnerHistory->m_entity_id);
+		std::ostringstream s2;
+		s2 << m_OwnerHistory->m_entity_id;
+		pt.put("OwnerHistory", s2.str());
 	}
 	else { element_entity->SetAttribute("OwnerHistory", ""); }
 
@@ -76,6 +90,7 @@ void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 		str = encodeStepString(m_Name->toString());
 		const char* namechr = str.c_str();
 		element_entity->SetAttribute("IFCLABEL", namechr);
+		pt.put("IFCLABEL", str);
 	}
 	else { element_entity->SetAttribute("IFCLABEL", ""); }
 
@@ -83,6 +98,7 @@ void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 		str = encodeStepString(m_Description->toString());
 		const char* Deschr = str.c_str();
 		element_entity->SetAttribute("Description", Deschr);
+		pt.put("Description", str);
 	}
 	else { element_entity->SetAttribute("Description", ""); }
 
@@ -90,8 +106,11 @@ void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity) const
 		str = encodeStepString(m_ObjectType->toString());
 		const char* Onjchr = str.c_str();
 		element_entity->SetAttribute("ObjectType", Onjchr);
+		pt.put("ObjectType", str);
 	}
 	else { element_entity->SetAttribute("ObjectType", ""); }
+
+	Dic[s.str()] = pt;
 }
 void IfcObject::getStepParameter( std::stringstream& stream, bool /*is_select_type*/ ) const { stream << "#" << m_entity_id; }
 const std::wstring IfcObject::toString() const { return L"IfcObject"; }

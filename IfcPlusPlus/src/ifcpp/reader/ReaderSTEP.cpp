@@ -23,6 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 #include <fstream>
 #include <iostream>
 
+
+
 #include <ifcpp/model/BasicTypes.h>
 #include <ifcpp/model/BuildingModel.h>
 #include <ifcpp/model/BuildingException.h>
@@ -943,7 +945,7 @@ inline std::string ws2s(const std::wstring& wstr)
 	return StringConverter.to_bytes(wstr);
 }
 
-void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_path)
+void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_path, const char* save_file_path_json)
 {
 	tinyxml2::TinyXMLDocument docXml;
 	const char* declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
@@ -962,6 +964,39 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 	size_t i = 0;
 	double last_progress = 0.0;
 	double num_objects = double(map_ordered.size());
+	boost::property_tree::ptree ptRoot;
+	std::map<std::string, boost::property_tree::ptree> m_entityNodeDic;
+
+	for (auto it = map_ordered.begin(); it != map_ordered.end(); ++it)
+	{
+		shared_ptr<BuildingEntity> obj = it->second;
+
+		if (obj.use_count() < 2)
+		{
+			// entity is referenced only in model map, not by other entities
+			if (!dynamic_pointer_cast<IfcProduct>(obj) && !dynamic_pointer_cast<IfcProject>(obj))
+			{
+				continue;
+			}
+		}
+		shared_ptr<IfcObject> ifc_obj = dynamic_pointer_cast<IfcObject>(obj);
+
+		if (ifc_obj)
+		{
+			XMLElement* element_entity = docXml.NewElement("BuildingEntity");
+			boost::property_tree::ptree ptelem;
+			element_root->InsertEndChild(element_entity);
+			std::vector<std::vector<const char*>> result;
+			obj->StepLine2XML(element_entity, ptelem, m_entityNodeDic);
+			std::string IDvalue = ptelem.get_child("Entity_ID").get_value<std::string>();
+			m_entityNodeDic[IDvalue] = ptelem;
+			ptRoot.add_child("BuildingEntity"+ IDvalue, ptelem);
+			//break;
+		}
+		++i;
+	}
+	boost::property_tree::write_json(save_file_path_json, ptRoot);
+
 	for (auto it = map_ordered.begin(); it != map_ordered.end(); ++it)
 	{
 		shared_ptr<BuildingEntity> obj = it->second;
@@ -978,24 +1013,16 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 		// check for certain type of the entity:
 		shared_ptr<IfcRelContainedInSpatialStructure> ifc_rela = dynamic_pointer_cast<IfcRelContainedInSpatialStructure>(obj);
 		shared_ptr<IfcRelAggregates> ifc_rela2 = dynamic_pointer_cast<IfcRelAggregates>(obj);
-		shared_ptr<IfcObject> ifc_obj = dynamic_pointer_cast<IfcObject>(obj);
 
-
-		if (ifc_obj)
+		 if (ifc_rela)
 		{
-			XMLElement* element_entity = docXml.NewElement("BuildingEntity");
-			element_root->InsertEndChild(element_entity);
-			std::vector<std::vector<const char*>> result;
-			obj->StepLine2XML(element_entity);
-
-			//break;
-		}
-		else if (ifc_rela)
-		{
+		
 			XMLElement* element_entity = docXml.NewElement("Container");
+
 			element_root->InsertEndChild(element_entity);
 			std::vector<std::vector<const char*>> result;
-			ifc_rela->StepLine2XML(element_entity);
+			ifc_rela->StepLine2XML(element_entity, ptRoot, m_entityNodeDic);
+
 		}
 		else if (ifc_rela2)
 		{
@@ -1006,6 +1033,11 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 		}
 		++i;
 	}
+	//std::ostringstream buf;
+
+
+	boost::property_tree::write_json(save_file_path_json, ptRoot);
+	
 
 	docXml.SaveFile(save_file_path);
 }

@@ -127,3 +127,6 @@ struct vec4
 
 #include "external/tinyxml2.h"
 using namespace tinyxml2;
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>

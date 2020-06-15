@@ -186,6 +186,19 @@ void writeEntityList2XML(tinyxml2::XMLElement* element_entity, const std::vector
 }
 
 template<typename T>
+void writeEntityList2Json(boost::property_tree::ptree& pt, const std::vector<shared_ptr<T> >& vec)
+{
+	//std::vector< std::pair<std::string, std::string> > buildingEnt;
+	//for (pt::ptree &buildingEnt : root.get_child("BuildingEntity"))
+	//{
+	//	buildingEnt.get_child("Entity_ID");
+	//}
+	//pt.get_child("BuildingEntity");
+
+
+}
+
+template<typename T>
 void writeEntityList2D( std::stringstream& stream, const std::vector<std::vector<shared_ptr<T> > >& vec )
 {
 	// example: ((#287,#291,$,#299),(#287,#291,$,#299))

@@ -38,3 +38,4 @@ D:\GitHub\ConnectNeo4jWithIFC\PushXml2Neo4j\obj\Debug\PushXml2Neo4j.csproj.CoreC
 D:\GitHub\ConnectNeo4jWithIFC\PushXml2Neo4j\obj\Debug\PushXml2Neo4j.csproj.CopyComplete
 D:\GitHub\ConnectNeo4jWithIFC\PushXml2Neo4j\obj\Debug\PushXml2Neo4j.exe
 D:\GitHub\ConnectNeo4jWithIFC\PushXml2Neo4j\obj\Debug\PushXml2Neo4j.pdb
+D:\GitHub\ConnectNeo4jWithIFC\PushXml2Neo4j\obj\Debug\PushXml2Neo4j.Form2.resources
