@@ -74,7 +74,7 @@ public:
 	
 	/** \brief Appends a line in STEP format to stream, including all attributes. */
 	virtual void getStepLine(std::stringstream& stream) const = 0;
-	virtual void StepLine2XML(tinyxml2::XMLElement*, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &m_entityNodeDic) const {};
+	virtual void StepLine2XML(tinyxml2::XMLElement*, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &m_entityNodeDic, std::string stream) const {};
 
 	/** \brief Reads all attributes from args. References to other entities are taken from map_entities. */
 	virtual void readStepArguments( const std::vector<std::wstring>& args, const std::map<int,shared_ptr<BuildingEntity> >& map_entities ) = 0;

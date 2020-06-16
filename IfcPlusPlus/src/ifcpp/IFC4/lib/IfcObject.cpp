@@ -55,10 +55,10 @@ void IfcObject::getStepLine( std::stringstream& stream ) const
 	if( m_ObjectType ) { m_ObjectType->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ");";
 }
-void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic) const
+void IfcObject::StepLine2XML(tinyxml2::XMLElement* element_entity, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic, std::string stream) const
 {
 	std::string str; 
-
+	pt.put("Source", stream);
 	element_entity->SetAttribute("Type", "IFCOBJECT");
 	pt.put("Type", "IFCOBJECT");
 	

@@ -21,7 +21,7 @@ public:
 	~IfcObject() = default;
 	virtual shared_ptr<BuildingObject> getDeepCopy( BuildingCopyOptions& options );
 	virtual void getStepLine( std::stringstream& stream ) const;
-	virtual void StepLine2XML(tinyxml2::XMLElement*, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic) const;
+	virtual void StepLine2XML(tinyxml2::XMLElement*, boost::property_tree::ptree& pt, std::map<std::string, boost::property_tree::ptree> &Dic, std::string stream) const;
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	virtual void readStepArguments( const std::vector<std::wstring>& args, const std::map<int,shared_ptr<BuildingEntity> >& map );
 	virtual void setInverseCounterparts( shared_ptr<BuildingEntity> ptr_self );

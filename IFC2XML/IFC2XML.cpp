@@ -10,9 +10,9 @@
 
 int main()
 {
-	const char* save_file_path = "C:/Users/zhiwa/OneDrive/Desktop/Linwood.xml";
-	const char* save_file_path_json = "C:/Users/zhiwa/OneDrive/Desktop/Linwood.json";
-	const char* test_file_path = "C:/Users/zhiwa/OneDrive/Desktop/test.json";
+	const char* save_file_path = "C:/Users/zhiwa/Desktop/Linwood.xml";
+	const char* save_file_path_json = "C:/Users/zhiwa/Desktop/Linwood.json";
+	const char* test_file_path = "C:/Users/zhiwa/Desktop/test.json";
 	std::cout << "Start to transfer IFC into XML\n";
 	std::cout << "Output Location:"<<save_file_path<<"\n";
 

@@ -987,7 +987,9 @@ void ReaderSTEP::xmlwriteModelToStream(std::wstring path, const char* save_file_
 			boost::property_tree::ptree ptelem;
 			element_root->InsertEndChild(element_entity);
 			std::vector<std::vector<const char*>> result;
-			obj->StepLine2XML(element_entity, ptelem, m_entityNodeDic);
+			std::stringstream stream;
+			obj->getStepLine(stream);
+			obj->StepLine2XML(element_entity, ptelem, m_entityNodeDic, stream.str());
 			std::string IDvalue = ptelem.get_child("Entity_ID").get_value<std::string>();
 			m_entityNodeDic[IDvalue] = ptelem;
 			ptRoot.add_child("BuildingEntity"+ IDvalue, ptelem);
